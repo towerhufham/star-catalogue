@@ -1,4 +1,5 @@
 <?php
+    //testing
 	ini_set('display_errors', 1);//Remove later
 	require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
 	//$query = "SELECT BOOK_TITLE,BOOK_YEAR,BOOK_COST,BOOK_SUBJECT FROM FACT_BOOK";
