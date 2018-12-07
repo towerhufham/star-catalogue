@@ -14,6 +14,8 @@
 		mysqli_close($dbc);
 		exit;
 	}
+	
+	$loggedin;
 ?>
 
 <!doctype html>
@@ -48,17 +50,30 @@
 
   <main>
 		<?php
+			//if user has submitted something
 			if (!empty($_GET)) {
-				$found = false;
-				foreach ($accountResults as $account) {
-					if ($_GET["username"] === $account["username"]) {
-						echo "Login succesfull!";
-						$found = true;
-						break;
+				//if filled out username/pass
+				if (array_key_exists("username", $_GET) and array_key_exists("password", $_GET)) {
+					//todo login vs registering
+					$found = false;
+					foreach ($accountResults as $account) {
+						if ($_GET["username"] === $account["username"]) {
+							if ($_GET["password"] === $account["password"]) {
+								echo "Login succesfull!";
+								$found = true;
+								$loggedin = true;
+								break;
+							} else {
+								echo "Incorrect password.";
+								$found = true;
+								$loggedin = false;
+								break;
+							}
+						}
 					}
 				}
 				if (!$found) {
-					echo "Login unsuccessful.";
+					echo "Username not found. Please register an account instead.";
 				}
 			}
 		?>
