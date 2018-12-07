@@ -47,6 +47,23 @@
   <!-- login stuff, search, ..? --->
 
   <main>
+		<?php
+			if (!empty($_GET)) {
+				$found = false;
+				foreach ($accountResults as $account) {
+					if ($_GET["username"] === $account["username"]) {
+						echo "Login succesfull!";
+						$found = true;
+						break;
+					}
+				}
+				if (!$found) {
+					echo "Login unsuccessful.";
+				}
+			}
+		?>
+		
+		<br>
 		<table>
 			<tr>
 				<th>Star Proper Name</th>
