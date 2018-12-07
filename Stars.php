@@ -95,6 +95,16 @@
 						}
 					}
 				}
+				//searching
+				if (array_key_exists("search", $_GET)) {
+					$query = "SELECT * FROM STAR WHERE starProperName LIKE " . "'%" . $_GET["search"] . "%'";
+					//echo $query;
+					$newStarResults = mysqli_query($dbc, $query);
+					global $starResults;
+					$starResults = $newStarResults;
+					$numResults = $starResults->num_rows;
+					echo "<br>Found " . $numResults . " results.";
+				}
 			}
 		?>
 		
