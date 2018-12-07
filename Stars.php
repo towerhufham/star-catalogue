@@ -54,26 +54,41 @@
 			if (!empty($_GET)) {
 				//if filled out username/pass
 				if (array_key_exists("username", $_GET) and array_key_exists("password", $_GET)) {
-					//todo login vs registering
-					$found = false;
-					foreach ($accountResults as $account) {
-						if ($_GET["username"] === $account["username"]) {
-							if ($_GET["password"] === $account["password"]) {
-								echo "Login succesfull!";
-								$found = true;
-								$loggedin = true;
-								break;
-							} else {
-								echo "Incorrect password.";
-								$found = true;
-								$loggedin = false;
-								break;
+					//logging in
+					if ($_GET["accountAction"] === "login") {
+						$found = false;
+						foreach ($accountResults as $account) {
+							if ($_GET["username"] === $account["username"]) {
+								if ($_GET["password"] === $account["password"]) {
+									echo "Login succesfull!";
+									$found = true;
+									$loggedin = true;
+									break;
+								} else {
+									echo "Incorrect password.";
+									$found = true;
+									$loggedin = false;
+									break;
+								}
+							}
+							if (!$found) {
+								echo "Username not found. Please register an account instead.";
 							}
 						}
+					//registering
+					} else if ($_GET["accountAction"] === "register") {
+						$found= false;
+						foreach ($accountResults as $account) {
+							if ($_GET["username"] === $account["username"]) {
+								$found = true;
+								echo "Username already registered. Please choose a different name.";
+							}
+						}
+						if (!$found) {
+							//add to database
+							echo "username wasn't found";
+						}
 					}
-				}
-				if (!$found) {
-					echo "Username not found. Please register an account instead.";
 				}
 			}
 		?>
