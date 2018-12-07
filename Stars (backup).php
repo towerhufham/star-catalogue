@@ -1,16 +1,14 @@
 <?php
 	ini_set('display_errors', 1);//Remove later
 	require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
-    $starQuery = "SELECT * FROM STAR ORDER BY starProperName asc";
-	$accountQuery = "SELECT username, password FROM USER";
-	$starResults = mysqli_query($dbc, $starQuery);
-	$accountResults = mysqli_query($dbc, $accountQuery);
+	//$query = "SELECT BOOK_TITLE,BOOK_YEAR,BOOK_COST,BOOK_SUBJECT FROM FACT_BOOK";
+    $query = "SELECT * FROM STAR ORDER BY starProperName asc";
+	$result = mysqli_query($dbc, $query);
 	//Fetch all rows of result as an associative array
-	if($starResults and $accountResults) {
-		mysqli_fetch_all($starResults, MYSQLI_ASSOC);
-		mysqli_fetch_all($accountResults, MYSQLI_ASSOC);
-	} else {
-		echo mysqli_error($dbc);  //Change to a generic message error before deployment
+	if($result)
+		mysqli_fetch_all($result, MYSQLI_ASSOC);
+	else {
+		echo mysqli_error($result);  //Change to a generic message error before deployment
 		mysqli_close($dbc);
 		exit;
 	}
@@ -35,8 +33,8 @@
   <form action="">
     Username: <input type="text" name="username"><br>
     Password: <input type="password" name="password"><br>
-    <input type="radio" name="accountAction" value="login" checked> Login
-    <input type="radio" name="accountAction" value="register"> Register <br>
+    Login <input type="radio" name="accountAction" value="login" checked>
+    Register <input type="radio" name="accountAction" value="register"><br>
     <input type="submit" value="Go">
   </form>
   <br>
@@ -64,7 +62,7 @@
 				<th>Constellation</th>
 			</tr>
 			<!-- Output the results table one row at a time -->
-			<?php foreach ($starResults as $one_star) { ?>
+			<?php foreach ($result as $one_star) { ?>
 			<tr>
 				<!-- Each row is an array. -->
 				<!-- Each item in a row is referenced using the db attribute as the index -->
