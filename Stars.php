@@ -15,6 +15,7 @@
 		exit;
 	}
 	
+	//this var will be set to true if the user is successfully logged in. Not used yet.
 	$loggedin;
 ?>
 
@@ -46,7 +47,6 @@
     Search stars: <input type="search" name="search"><br>
     <input type="submit" value="Submit">
   </form>
-  <!-- login stuff, search, ..? --->
 
   <main>
 		<?php
@@ -56,15 +56,20 @@
 				if (array_key_exists("username", $_GET) and array_key_exists("password", $_GET)) {
 					//logging in
 					if ($_GET["accountAction"] === "login") {
+						//we're looking for a username in the database
 						$found = false;
 						foreach ($accountResults as $account) {
+							//check if this username is valid...
 							if ($_GET["username"] === $account["username"]) {
+								//and if the password matches...
 								if ($_GET["password"] === $account["password"]) {
+									//successful login. Doesn't do anyhthing yet though.
 									echo "Login succesfull!";
 									$found = true;
 									$loggedin = true;
 									break;
 								} else {
+									//user typed in invalid password for a valid account
 									echo "Incorrect password.";
 									$found = true;
 									$loggedin = false;
@@ -73,23 +78,29 @@
 							}
 						}
 						if (!$found) {
+							//user typed in username that isn't in database
 							echo "Username not found. Please register an account instead.";
 						}
 					//registering
 					} else if ($_GET["accountAction"] === "register") {
 						$found= false;
 						foreach ($accountResults as $account) {
+							//if user trying to register a username already in database, stop
 							if ($_GET["username"] === $account["username"]) {
 								$found = true;
-								echo "Username already registered. Please choose a different name.";
+								echo "Username already registered. Please choose a different name";
+								break;
 							}
 						}
+						//if username isn't in database, register account
 						if (!$found) {
+							//insert username & password into USER table
 							$query = "INSERT INTO USER (username, password) VALUES ( '" . $_GET["username"] . "' , '" . $_GET["password"] . "')";
-							//echo $query;
 							if (mysqli_query($dbc, $query)) {
+								//let user know it worked
 								echo "User " . $_GET["username"] . " succesfully added to database.";
 							} else {
+								//if an error occurs, this is spat out. (hopefully won't happen though)
 								echo "Error registering user.";
 							}
 						}
@@ -97,11 +108,13 @@
 				}
 				//searching
 				if (array_key_exists("search", $_GET)) {
+					//search for star proper names for LIKE what the user input in the search box
 					$query = "SELECT * FROM STAR WHERE starProperName LIKE " . "'%" . $_GET["search"] . "%'";
-					//echo $query;
 					$newStarResults = mysqli_query($dbc, $query);
+					//replace $starResults with all the stars with the refined $newStarResults
 					global $starResults;
 					$starResults = $newStarResults;
+					//display number of rows found
 					$numResults = $starResults->num_rows;
 					echo "<br>Found " . $numResults . " results.";
 				}
