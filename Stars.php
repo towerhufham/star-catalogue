@@ -71,9 +71,9 @@
 									break;
 								}
 							}
-							if (!$found) {
-								echo "Username not found. Please register an account instead.";
-							}
+						}
+						if (!$found) {
+							echo "Username not found. Please register an account instead.";
 						}
 					//registering
 					} else if ($_GET["accountAction"] === "register") {
@@ -85,8 +85,13 @@
 							}
 						}
 						if (!$found) {
-							//add to database
-							echo "username wasn't found";
+							$query = "INSERT INTO USER (username, password) VALUES ( '" . $_GET["username"] . "' , '" . $_GET["password"] . "')";
+							//echo $query;
+							if (mysqli_query($dbc, $query)) {
+								echo "User " . $_GET["username"] . " succesfully added to database.";
+							} else {
+								echo "Error registering user.";
+							}
 						}
 					}
 				}
