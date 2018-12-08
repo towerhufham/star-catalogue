@@ -16,7 +16,7 @@
 	}
 	
 	//this var will be set to true if the user is successfully logged in. Not used yet.
-	$loggedin;
+	$loggedin = false;
 ?>
 
 <!doctype html>
@@ -47,7 +47,6 @@
     Search stars: <input type="search" name="search"><br>
     <input type="submit" value="Submit">
   </form>
-
   <main>
 		<?php
 			//if user has submitted something
@@ -120,45 +119,47 @@
 				}
 			}
 		?>
-		
-		<br>
-		<table>
-			<tr>
-				<th>Star Proper Name</th>
-				<th>Bayer Designation</th>
-				<th>Variable Star</th>
-                <th>Henry Draper Catalogue</th>
-                <th>Hipparcos</th>
-                <th>Right Ascension</th>
-                <th>Declination</th>
-                <th>Apparent Magnitude</th>
-                <th>Absolute Magnitude</th>
-                <th>Cosmic Distance Ladder</th>
-                <th>Stellar Classification</th>
-                <th>Notes</th>
-				<th>Constellation</th>
-			</tr>
-			<!-- Output the results table one row at a time -->
-			<?php foreach ($starResults as $one_star) { ?>
-			<tr>
-				<!-- Each row is an array. -->
-				<!-- Each item in a row is referenced using the db attribute as the index -->
-				<td><?php echo $one_star['starProperName']; ?></td>
-				<td><?php echo $one_star['bayerDesignation']; ?></td>
-				<td><?php echo $one_star['variableStar']; ?></td>
-                <td><?php echo $one_star['henryDraperCatalogue']; ?></td>
-                <td><?php echo $one_star['hipparcos']; ?></td>
-                <td><?php echo $one_star['rightAscension']; ?></td>
-                <td><?php echo $one_star['declination']; ?></td>
-                <td><?php echo $one_star['apparentMagnitude']; ?></td>
-                <td><?php echo $one_star['absoluteMagnitude']; ?></td>
-                <td><?php echo $one_star['cosmicDistanceLadder']; ?></td>
-                <td><?php echo $one_star['stellarClassification']; ?></td>
-                <td><?php echo $one_star['notes']; ?></td>
-				<td><?php echo $one_star['constellation']; ?></td>
-			</tr>
-			<?php } ?>
-		</table>
+		<?php if($loggedin){ ?>
+			<br>
+			<table>
+				<tr>
+					<th>Star Proper Name</th>
+					<th>Bayer Designation</th>
+					<th>Variable Star</th>
+					<th>Henry Draper Catalogue</th>
+					<th>Hipparcos</th>
+					<th>Right Ascension</th>
+					<th>Declination</th>
+					<th>Apparent Magnitude</th>
+					<th>Absolute Magnitude</th>
+					<th>Cosmic Distance Ladder</th>
+					<th>Stellar Classification</th>
+					<th>Notes</th>
+					<th>Constellation</th>
+				</tr>
+				<!-- Output the results table one row at a time -->
+				<?php 
+						foreach ($starResults as $one_star) { ?>
+							<tr>
+								<!-- Each row is an array. -->
+								<!-- Each item in a row is referenced using the db attribute as the index -->
+								<td><?php echo $one_star['starProperName']; ?></td>
+								<td><?php echo $one_star['bayerDesignation']; ?></td>
+								<td><?php echo $one_star['variableStar']; ?></td>
+								<td><?php echo $one_star['henryDraperCatalogue']; ?></td>
+								<td><?php echo $one_star['hipparcos']; ?></td>
+								<td><?php echo $one_star['rightAscension']; ?></td>
+								<td><?php echo $one_star['declination']; ?></td>
+								<td><?php echo $one_star['apparentMagnitude']; ?></td>
+								<td><?php echo $one_star['absoluteMagnitude']; ?></td>
+								<td><?php echo $one_star['cosmicDistanceLadder']; ?></td>
+								<td><?php echo $one_star['stellarClassification']; ?></td>
+								<td><?php echo $one_star['notes']; ?></td>
+								<td><?php echo $one_star['constellation']; ?></td>
+							</tr>
+				<?php } ?>
+			</table>
+		<?php } ?>	
     </main>
 </body>
 
