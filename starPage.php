@@ -1,7 +1,7 @@
 <?php
 	ini_set('display_errors', 1);//Remove later
 	require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
-    $starQuery = "SELECT * FROM STAR ORDER BY starProperName asc";
+    $starQuery = "SELECT * FROM STAR ORDER BY constellation asc";
 	$accountQuery = "SELECT username, password FROM USER";
 	$starResults = mysqli_query($dbc, $starQuery);
 	$accountResults = mysqli_query($dbc, $accountQuery);
@@ -14,8 +14,6 @@
 		mysqli_close($dbc);
 		exit;
 	}
-	
-	//this var will be set to true if the user is successfully logged in. Not used yet.
 ?>
 
 <!doctype html>
@@ -33,8 +31,45 @@
 
 <body>
   <h1>Stars</h1>
+  <form action="">
+    Search stars: <input type="search" name="search"><br>
+    <input type="submit" value="Submit">
+  </form>
 </body>
-    <br>
+<main>
+
+    <form action = "select_books.php" method="get">
+			<!-- Use a PHP loop to generate a select list of authors in the DB -->
+			Select the constellation you are searching for: 
+			<select name="constellation">
+			<?php foreach ($result as $constellation) {
+				//retrieve the data from each row which is an array with indices mapping to DB attribute names
+				$authID = $author['AU_ID'];
+				$authFirst = $author['AU_FNAME'];
+				$authLast = $author['AU_LNAME'];
+				$authName = "$authLast, $authFirst"; //concatenate last and first names into one variable
+				echo "<option value=\"$authID\">$authName</option>";
+			} ?>
+			</select>
+			<input type="submit" value="Find Books">
+		</form>
+
+    <?php
+        if (array_key_exists("search", $_GET)) {
+                //search for star proper names for LIKE what the user input in the search box
+                $searchVal = strtolower($_GET["search"]);
+                $query = "SELECT * FROM STAR WHERE lower(starProperName) LIKE " . "'%" . $searchVal . "%'";
+                
+				$newStarResults = mysqli_query($dbc, $query);
+				//replace $starResults with all the stars with the refined $newStarResults
+				global $starResults;
+				$starResults = $newStarResults;
+				//display number of rows found
+				$numResults = $starResults->num_rows;
+				echo "<br>Found " . $numResults . " results.";
+            }
+                ?>
+        <br> <!-- Output table -->
                 <table>
                     <tr>
                         <th>Star Proper Name</th>
@@ -73,3 +108,4 @@
                                 </tr>
                     <?php } ?>
                 </table>
+</main>
