@@ -2,18 +2,23 @@
 	ini_set('display_errors', 1);//Remove later
 	require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
     $starQuery = "SELECT * FROM STAR ORDER BY constellation asc";
-	$accountQuery = "SELECT username, password FROM USER";
+    $accountQuery = "SELECT username, password FROM USER";
+    $constellationQuery = "SELECT * FROM CONSTELLATION ORDER BY constellationName ASC";
+
 	$starResults = mysqli_query($dbc, $starQuery);
-	$accountResults = mysqli_query($dbc, $accountQuery);
+    $accountResults = mysqli_query($dbc, $accountQuery);
+    $constellationResults = mysqli_query($dbc, $constellationQuery);
 	//Fetch all rows of result as an associative array
-	if($starResults and $accountResults) {
+	if($starResults and $accountResults and $constellationQuery) {
 		mysqli_fetch_all($starResults, MYSQLI_ASSOC);
-		mysqli_fetch_all($accountResults, MYSQLI_ASSOC);
+        mysqli_fetch_all($accountResults, MYSQLI_ASSOC);
+        mysqli_fetch_all($constellationResults, MYSQLI_ASSOC);
 	} else {
 		echo mysqli_error($dbc);  //Change to a generic message error before deployment
 		mysqli_close($dbc);
 		exit;
-	}
+    }
+    
 ?>
 
 <!doctype html>
@@ -22,11 +27,11 @@
 
 <head>
   <meta charset="utf-8">
-
+  <link href="main.css" rel="stylesheet">
   <title>Star Catalogue</title>
   <meta name="description" content="A catalogue of stars">
   <meta name="author" content="Team Data (CSC 455 Fall 2018)">
-
+  
 </head>
 
 <body>
@@ -38,20 +43,21 @@
 </body>
 <main>
 
-    <form action = "select_books.php" method="get">
+    <form action = "select_stars.php" method="get">
 			<!-- Use a PHP loop to generate a select list of authors in the DB -->
 			Select the constellation you are searching for: 
 			<select name="constellation">
-			<?php foreach ($result as $constellation) {
+			<?php foreach ($constellationResults as $constellation) {
 				//retrieve the data from each row which is an array with indices mapping to DB attribute names
-				$authID = $author['AU_ID'];
-				$authFirst = $author['AU_FNAME'];
-				$authLast = $author['AU_LNAME'];
-				$authName = "$authLast, $authFirst"; //concatenate last and first names into one variable
-				echo "<option value=\"$authID\">$authName</option>";
+				//$authID = $author['AU_ID'];
+				//$authFirst = $author['AU_FNAME'];
+				//$authLast = $author['AU_LNAME'];
+                //$authName = "$authLast, $authFirst"; //concatenate last and first names into one variable
+                $constellationNameID = $constellation['constellationName'];
+				echo "<option value=\"$constellationNameID\">$constellationNameID</option>";
 			} ?>
 			</select>
-			<input type="submit" value="Find Books">
+			<input type="submit" value="Find Stars">
 		</form>
 
     <?php

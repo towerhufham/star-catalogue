@@ -1,52 +1,49 @@
 <?php
-	require_once('../mysqli_config.php'); //adjust the relative path as necessary to find your config file
+	require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
 	//Filter the variable sent from the select list
 	if(isset($_GET['constellation']))
-		$constellation = filter_var($_GET['constellation']);
+		$constellation = strtolower(filter_var($_GET['constellation']));
 	else
 		$constellation = "andromeda"; //select a valid default value
 	/* Without prepared statements
 	$query = "SELECT AU_FNAME, AU_LNAME from FACT_AUTHOR where AU_ID=$authorID";
 	$result = mysqli_query($dbc, $query);
 	*/
+	/*
 	//With prepared statements:
-	$query = "SELECT * from Star where constellation=?";
+	$query = "SELECT *FROM STAR where constellation=?";
 	$stmt = mysqli_prepare($dbc, $query);
-	mysqli_stmt_bind_param($stmt, "i", $authorID);
+	mysqli_stmt_bind_param($stmt, "i", $constellation);
 	mysqli_stmt_execute($stmt);
 	$result = mysqli_stmt_get_result($stmt); 
-	
+	//echo $constellation;
 	if($result){ //it ran successfully
 		$star= mysqli_fetch_assoc($result); //Fetches the row as an associative array with DB attributes as keys
 		$properName = $star['starProperName'];
-		$constellation = $star['constellation'];
+		//$constellation = $star['constellation'];
 	}
 	else {
-		echo "That star was not found";
+		echo "That constellation was not found";
 		mysqli_close($dbc);
 		exit;
 	}
-	//Author found, retrieve books by that author
-		/* Without prepared statements: 
-		$query2 = "SELECT BOOK_TITLE,BOOK_YEAR,BOOK_COST,BOOK_SUBJECT FROM FACT_BOOK join FACT_WRITES using (BOOK_NUM) where AU_ID=$authorID"; 
-		$result2 = mysqli_query($dbc, $query2);
-		//Fetch all rows of result as an associative array
-		if($result2)
-			mysqli_fetch_all($result2, MYSQLI_ASSOC); */
-		
+	*/
+	//Constellation found, retrieve stars within that constellation
 		//With prepared statements:
-		$query2 = "SELECT * FROM STAR where constellation=?"; 
-		$stmt2 = mysqli_prepare($dbc, $query2);
-		mysqli_stmt_bind_param($stmt2,"i",$authorID);
-		mysqli_stmt_execute($stmt2);
-		$result2= mysqli_stmt_get_result($stmt2); 
-		if($result2) { //it ran successfully
+		$query = "SELECT * FROM STAR WHERE constellation='$constellation'"; 
+		//echo $query2;
+		$stmt = mysqli_prepare($dbc, $query);
+		mysqli_stmt_bind_param($stmt,"i",$constellation);
+		mysqli_stmt_execute($stmt);
+		$result= mysqli_stmt_get_result($stmt); 
+
+		if($result) { //it ran successfully
 		//Fetch all rows of result as an associative array
-			mysqli_fetch_all($result2, MYSQLI_ASSOC);
+			mysqli_fetch_all($result, MYSQLI_ASSOC);
 		}
 		//remaining code the same for either of the above
 		else { 
-			echo "We were unable to retrieve the data for $properName $constellation";
+			echo "We were unable to retrieve the data for $constellation";
 			mysqli_close($dbc);
 			exit;
 		} 
@@ -61,7 +58,7 @@
 </head>
 <body>
 	<header>
-		<h2>Stars within <?php echo "$properName $constellation"?>:</h2>
+		<h2>Stars within <?php echo "$constellation"?>:</h2>
 	</header>
 	<main>
     <br> <!-- Output table -->
@@ -83,7 +80,7 @@
                     </tr>
                     <!-- Output the results table one row at a time -->
                     <?php 
-                            foreach ($starResults as $one_star) { ?>
+                            foreach ($result as $one_star) { ?>
                                 <tr>
                                     <!-- Each row is an array. -->
                                     <!-- Each item in a row is referenced using the db attribute as the index -->

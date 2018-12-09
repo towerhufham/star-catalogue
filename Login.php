@@ -47,22 +47,6 @@
     Search stars: <input type="search" name="search"><br>
     <input type="submit" value="Submit">
   </form>
-
-    <form action = "select_stars.php" method="get">
-			<!-- Use a PHP loop to generate a select list of authors in the DB -->
-			Select the constellation you are searching for: 
-			<select name="constellation">
-			<?php foreach ($result as $constellation) {
-				//retrieve the data from each row which is an array with indices mapping to DB attribute names
-				$constellation = $author['constellation'];
-				$properName = $['AU_FNAME'];
-				$authLast = $author['AU_LNAME'];
-				$authName = "$authLast, $authFirst"; //concatenate last and first names into one variable
-				echo "<option value=\"$authID\">$authName</option>";
-			} ?>
-			</select>
-			<input type="submit" value="Find Books">
-		</form>
   <main>
 		<?php
 			//if user has submitted something
