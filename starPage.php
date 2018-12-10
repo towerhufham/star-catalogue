@@ -1,24 +1,32 @@
 <?php
+    session_start();
+    if($_SESSION['username']){
+        //echo "login successful";
+        $currentUser = $_SESSION['username'];
+        $logStatus = "Logout";
+        $_SESSION['username'] = $currentUser;
+    }
+    else{
+        $currentUser = "Not Logged In";
+        $logStatus= "Login";
+    }
 	ini_set('display_errors', 1);//Remove later
 	require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
     $starQuery = "SELECT * FROM STAR ORDER BY constellation asc";
-    $accountQuery = "SELECT username, password FROM USER";
+    //$accountQuery = "SELECT username, password FROM USER";
     $constellationQuery = "SELECT * FROM CONSTELLATION ORDER BY constellationName ASC";
 
 	$starResults = mysqli_query($dbc, $starQuery);
-    $accountResults = mysqli_query($dbc, $accountQuery);
+    //$accountResults = mysqli_query($dbc, $accountQuery);
     $constellationResults = mysqli_query($dbc, $constellationQuery);
 	//Fetch all rows of result as an associative array
-	if($starResults and $accountResults and $constellationQuery) {
+	if($starResults) {
 		mysqli_fetch_all($starResults, MYSQLI_ASSOC);
-        mysqli_fetch_all($accountResults, MYSQLI_ASSOC);
-        mysqli_fetch_all($constellationResults, MYSQLI_ASSOC);
 	} else {
 		echo mysqli_error($dbc);  //Change to a generic message error before deployment
 		mysqli_close($dbc);
 		exit;
     }
-    
 ?>
 
 <!doctype html>
@@ -36,6 +44,30 @@
 
 <body>
   <h1>Stars</h1>
+  <h2>
+    <?php echo $currentUser; ?>
+    <form action='' method="post">
+    <input type="submit" name='logout' id=logout value=<?php echo $logStatus?>> 
+    </form>
+    </h2>
+    <?php
+    function logout(){
+        $_SESSION['username'] = null;
+        $currentUser = "Not Logged In";
+        $logStatus = "Login";
+        header('Location: Login.php');
+    }
+
+    if(array_key_exists('logout',$_POST)){
+        echo "logout";
+        logout();
+    }
+    ?>
+  <form action= "bookmarks.php" method="get">
+        Open bookmarks: <input type="submit" value="Go">
+        <br>
+  </form>
+
   <form action="">
     Search stars: <input type="search" name="search"><br>
     <input type="submit" value="Submit">
@@ -44,15 +76,10 @@
 <main>
 
     <form action = "select_stars.php" method="get">
-			<!-- Use a PHP loop to generate a select list of authors in the DB -->
+			<!-- Use a PHP loop to generate a select list of constellations in the DB -->
 			Select the constellation you are searching for: 
 			<select name="constellation">
 			<?php foreach ($constellationResults as $constellation) {
-				//retrieve the data from each row which is an array with indices mapping to DB attribute names
-				//$authID = $author['AU_ID'];
-				//$authFirst = $author['AU_FNAME'];
-				//$authLast = $author['AU_LNAME'];
-                //$authName = "$authLast, $authFirst"; //concatenate last and first names into one variable
                 $constellationNameID = $constellation['constellationName'];
 				echo "<option value=\"$constellationNameID\">$constellationNameID</option>";
 			} ?>
@@ -60,24 +87,14 @@
 			<input type="submit" value="Find Stars">
 		</form>
 
-    <?php
-        if (array_key_exists("search", $_GET)) {
-                //search for star proper names for LIKE what the user input in the search box
-                $searchVal = strtolower($_GET["search"]);
-                $query = "SELECT * FROM STAR WHERE lower(starProperName) LIKE " . "'%" . $searchVal . "%'";
-                
-				$newStarResults = mysqli_query($dbc, $query);
-				//replace $starResults with all the stars with the refined $newStarResults
-				global $starResults;
-				$starResults = $newStarResults;
-				//display number of rows found
-				$numResults = $starResults->num_rows;
-				echo "<br>Found " . $numResults . " results.";
-            }
-                ?>
+    <!--save bookmarks for user button -->
+    <form action ="" method="post">
+            Save bookmarks selected via this button: 
+            <input type="submit" value="Save">
         <br> <!-- Output table -->
                 <table>
                     <tr>
+                        <th>Bookmark</th>
                         <th>Star Proper Name</th>
                         <th>Bayer Designation</th>
                         <th>Variable Star</th>
@@ -98,6 +115,7 @@
                                 <tr>
                                     <!-- Each row is an array. -->
                                     <!-- Each item in a row is referenced using the db attribute as the index -->
+                                    <td><input type='checkbox' name='bookmark' value='bookmark'></td>
                                     <td><?php echo $one_star['starProperName']; ?></td>
                                     <td><?php echo $one_star['bayerDesignation']; ?></td>
                                     <td><?php echo $one_star['variableStar']; ?></td>
@@ -111,6 +129,7 @@
                                     <td><?php echo $one_star['stellarClassification']; ?></td>
                                     <td><?php echo $one_star['notes']; ?></td>
                                     <td><?php echo $one_star['constellation']; ?></td>
+                                    
                                 </tr>
                     <?php } ?>
                 </table>

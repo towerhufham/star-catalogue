@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	ini_set('display_errors', 1);//Remove later
 	require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
     $starQuery = "SELECT * FROM STAR ORDER BY starProperName asc";
@@ -14,7 +15,7 @@
 		mysqli_close($dbc);
 		exit;
 	}
-	session_start();
+	
 	//this var will be set to true if the user is successfully logged in. Not used yet.
 	$loggedin = false;
 ?>
@@ -33,7 +34,7 @@
 </head>
 
 <body>
-  <h1>Stars</h1>
+  <h1>Star Catalogue Login</h1>
 
   <form action="">
     Username: <input type="text" name="username"><br>
@@ -43,10 +44,6 @@
     <input type="submit" value="Go">
   </form>
   <br>
-  <form action="">
-    Search stars: <input type="search" name="search"><br>
-    <input type="submit" value="Submit">
-  </form>
   <main>
 		<?php
 			//if user has submitted something
@@ -66,7 +63,7 @@
 									echo "Login succesfull!";
 									$found = true;
 									$loggedin = true;
-									break;
+									$_SESSION['username'] = $account['username'];									break;
 								} else {
 									//user typed in invalid password for a valid account
 									echo "Incorrect password.";

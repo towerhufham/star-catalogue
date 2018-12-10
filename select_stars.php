@@ -5,29 +5,7 @@
 		$constellation = strtolower(filter_var($_GET['constellation']));
 	else
 		$constellation = "andromeda"; //select a valid default value
-	/* Without prepared statements
-	$query = "SELECT AU_FNAME, AU_LNAME from FACT_AUTHOR where AU_ID=$authorID";
-	$result = mysqli_query($dbc, $query);
-	*/
-	/*
-	//With prepared statements:
-	$query = "SELECT *FROM STAR where constellation=?";
-	$stmt = mysqli_prepare($dbc, $query);
-	mysqli_stmt_bind_param($stmt, "i", $constellation);
-	mysqli_stmt_execute($stmt);
-	$result = mysqli_stmt_get_result($stmt); 
-	//echo $constellation;
-	if($result){ //it ran successfully
-		$star= mysqli_fetch_assoc($result); //Fetches the row as an associative array with DB attributes as keys
-		$properName = $star['starProperName'];
-		//$constellation = $star['constellation'];
-	}
-	else {
-		echo "That constellation was not found";
-		mysqli_close($dbc);
-		exit;
-	}
-	*/
+
 	//Constellation found, retrieve stars within that constellation
 		//With prepared statements:
 		$query = "SELECT * FROM STAR WHERE constellation='$constellation'"; 
@@ -35,11 +13,11 @@
 		$stmt = mysqli_prepare($dbc, $query);
 		mysqli_stmt_bind_param($stmt,"i",$constellation);
 		mysqli_stmt_execute($stmt);
-		$result= mysqli_stmt_get_result($stmt); 
+		$starResult= mysqli_stmt_get_result($stmt); 
 
-		if($result) { //it ran successfully
+		if($starResult) { //it ran successfully
 		//Fetch all rows of result as an associative array
-			mysqli_fetch_all($result, MYSQLI_ASSOC);
+			mysqli_fetch_all($starResult, MYSQLI_ASSOC);
 		}
 		//remaining code the same for either of the above
 		else { 
@@ -56,6 +34,7 @@
 	<link href="main.css" rel="stylesheet">
 	<!-- Name -->
 </head>
+
 <body>
 	<header>
 		<h2>Stars within <?php echo "$constellation"?>:</h2>
@@ -80,7 +59,7 @@
                     </tr>
                     <!-- Output the results table one row at a time -->
                     <?php 
-                            foreach ($result as $one_star) { ?>
+                            foreach ($starResult as $one_star) { ?>
                                 <tr>
                                     <!-- Each row is an array. -->
                                     <!-- Each item in a row is referenced using the db attribute as the index -->
