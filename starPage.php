@@ -74,7 +74,7 @@
   </form>
 
   <form action="">
-    Search stars: <input type="search" name="search"><br>
+    Search stars: <input type="search" name="search">
     <input type="submit" value="Submit">
   </form>
 </body>
