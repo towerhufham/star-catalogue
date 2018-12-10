@@ -1,0 +1,8 @@
+/* A simple css for the tablie display */
+
+td, th {padding: 1em;}
+th {
+	text-align: left;
+	background-color: black;
+	color: white;
+}
