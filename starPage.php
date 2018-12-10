@@ -40,10 +40,11 @@
   <meta name="description" content="A catalogue of stars">
   <meta name="author" content="Team Data (CSC 455 Fall 2018)">
   
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 
 <body>
-  <h1>Stars</h1>
+  <h1>Star Catalogue</h1>
   <h2>
     <?php echo $currentUser; ?>
     <form action='' method="post">

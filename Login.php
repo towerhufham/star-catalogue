@@ -30,6 +30,7 @@
   <title>Star Catalogue</title>
   <meta name="description" content="A catalogue of stars">
   <meta name="author" content="Team Data (CSC 455 Fall 2018)">
+  <link href="main.css" rel="stylesheet">
 
 </head>
 

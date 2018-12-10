@@ -19,6 +19,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<link href="main.css" rel="stylesheet">
     <title>Constellations</title>
 	<meta charset ="utf-8"> 
 	<h1>Team Data</h1>

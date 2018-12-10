@@ -1,8 +1,30 @@
-/* A simple css for the tablie display */
+body {
+	color: #9DA1CC;
+	background-color: #171D40;
+	font-family: 'Roboto', sans-serif;
+}
+
+input {
+  background: #9DA1CC;
+  border:0 none;
+}
+
+select {
+  background: #9DA1CC;
+  border:0 none;
+}
+
+input[type="search"] {
+  background: #373D70;
+  border:0 none;
+  font-family: 'Roboto', sans-serif;
+}
 
 td, th {padding: 1em;}
 th {
 	text-align: left;
-	background-color: black;
+	background-color: #070D20;
+	/*
 	color: white;
+	*/
 }
