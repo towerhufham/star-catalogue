@@ -27,6 +27,10 @@
 	<header>
 		<h1>List of All Constellations</h1>
 	</header>
+	<form action="starPage.php">
+		<input type="submit" value="Back" />
+	</form>
+	<br>
 	<table>
 		<tr>
 			<th>Constellation Name</th>

@@ -59,6 +59,9 @@
     Search bookmarks: <input type="search" name="search"><br>
     <input type="submit" value="Submit">
   </form>
+  <form action="starPage.php">
+		<input type="submit" value="Back" />
+  </form>
 </body>
 <main>
 <?php

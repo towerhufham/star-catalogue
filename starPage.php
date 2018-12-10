@@ -63,6 +63,11 @@
         logout();
     }
     ?>
+	
+	<form action="constellationPage.php">
+		See constellations: <input type="submit" value="Go" />
+	</form>
+	
   <form action= "bookmarks.php" method="get">
         Open bookmarks: <input type="submit" value="Go">
         <br>

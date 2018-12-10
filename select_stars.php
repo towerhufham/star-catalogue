@@ -39,6 +39,9 @@
 	<header>
 		<h2>Stars within <?php echo "$constellation"?>:</h2>
 	</header>
+	<form action="starPage.php">
+		<input type="submit" value="Back" />
+	</form>
 	<main>
     <br> <!-- Output table -->
                 <table>
