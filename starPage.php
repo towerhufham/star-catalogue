@@ -12,8 +12,7 @@
     }
 	ini_set('display_errors', 1);//Remove later
 	require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
-    // $starQuery = "SELECT * FROM STAR ORDER BY constellation asc";
-    $starQuery = "CALL allstars()"; //procedure
+    $starQuery = "SELECT * FROM STAR ORDER BY constellation asc";
     //$accountQuery = "SELECT username, password FROM USER";
     $constellationQuery = "SELECT * FROM CONSTELLATION ORDER BY constellationName ASC"; 
 
@@ -66,7 +65,7 @@
     }
     ?>
 	<form method= "POST" action =''>
-		Reset star chart: <input type = "submit" name="resetBtn" value="Reset">
+		Reset star chart: <input type = "submit" name="resetBtn" value="reset">
 	</form>
 	<form action="constellationPage.php">
 		See constellations: <input type="submit" value="Go" />
@@ -87,14 +86,12 @@
   </form>
 </body>
 <main>
-
 	<form method="POST" action=''>
 		Sort by Bayer Designation: <input type="submit" name="bayerBtn" value="Show">
 	</form>
-
     <form action = "select_stars.php" method="get">
 		<!-- Use a PHP loop to generate a select list of constellations in the DB -->
-		Explore the constellation you are looking for: 
+		Explore the constellation you are lookin for: 
 		<select name="constellation">
 		<?php foreach ($constellationResults as $constellation) {
 			$constellationNameID = $constellation['constellationName'];
@@ -152,13 +149,12 @@
 					$starResults = $newStarResults;
 					//$numResults = $starResults->num_rows;
 				}
-				if(isset($_POST['bayerBtn'])){
+				else if(isset($_POST['bayerBtn'])){
 					$bayerQuery = "SELECT * FROM STAR WHERE STAR.bayerDesignation <> ''";
-					$newStarResults = mysqli_query($dbc, $bayerQuery);
-					$starResults = $newStarResults;
+
+					$starResults = mysqli_query($dbc, $bayerQuery);
 				}
-				if(isset($_POST['resetBtn'])){
-					$starQuery = "Call allstars()";
+				else if(isset($_POST['resetBtn'])){
 					$starResults = mysqli_query($dbc, $starQuery);
 				}
 				foreach ($starResults as $one_star) { ?>

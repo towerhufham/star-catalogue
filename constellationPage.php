@@ -36,6 +36,7 @@
 		<tr>
 			<th>Constellation Name</th>
 			<th>Abbreviation</th>
+			<th>Bordering Constellation</th>
 		</tr>
 		<!-- Output the results table one row at a time -->
 		<?php foreach ($fullResult as $one_const) { ?>

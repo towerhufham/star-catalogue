@@ -83,9 +83,10 @@
         $searchVal = strtolower($_GET["search"]);
         $query = "SELECT * FROM BOOKMARK WHERE lower(star) LIKE " . "'%" . $searchVal . "%'";
                 
-		$bookmarkResults = mysqli_query($dbc, $query);
+		$newBookmarkResults = mysqli_query($dbc, $query);
 		//replace $starResults with all the stars with the refined $newStarResults
 		
+		$bookmarkResults = $newBookmarkResults;
 		//display number of rows found
 		$numResults = $bookmarkResults->num_rows;
 		echo "<br>Found " . $numResults . " results.";
@@ -96,11 +97,13 @@
         STAR.henryDraperCatalogue, STAR.hipparcos, STAR.rightAscension, STAR.declination,
          STAR.apparentMagnitude, STAR.absoluteMagnitude, STAR.cosmicDistanceLadder, 
          STAR.stellarClassification, STAR.notes, BOOKMARK.constellation FROM BOOKMARK, 
-         STAR WHERE BOOKMARK.star = STAR.starProperName and BOOKMARK.userID = '" . $currentUser . "' 
+         STAR WHERE BOOKMARK.star = STAR.starProperName and BOOKMARK.userID = $currentUser 
          ORDER BY BOOKMARK.constellation ASC";
 
-        $bookmarkResults = mysqli_query($dbc, $query);
-		
+        $newBookmarkResults = mysqli_query($dbc, $query);
+
+        $bookmarkResults = $newBookmarkResults;
+
         $buildNewTable = true;
         //$numResults = $bookmarkResults->num_rows;
     }
