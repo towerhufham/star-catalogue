@@ -65,7 +65,7 @@
     }
     ?>
 	<form method= "POST" action =''>
-		Reset star chart: <input type = "submit" name="resetBtn" value="reset">
+		Reset star chart: <input type = "submit" name="resetBtn" value="Reset">
 	</form>
 	<form action="constellationPage.php">
 		See constellations: <input type="submit" value="Go" />
@@ -91,7 +91,7 @@
 	</form>
     <form action = "select_stars.php" method="get">
 		<!-- Use a PHP loop to generate a select list of constellations in the DB -->
-		Explore the constellation you are lookin for: 
+		Explore the constellation you are looking for: 
 		<select name="constellation">
 		<?php foreach ($constellationResults as $constellation) {
 			$constellationNameID = $constellation['constellationName'];
