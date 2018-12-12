@@ -82,22 +82,24 @@
 <main>
 
     <form action = "select_stars.php" method="get">
-			<!-- Use a PHP loop to generate a select list of constellations in the DB -->
-			Select the constellation you are searching for: 
-			<select name="constellation">
-			<?php foreach ($constellationResults as $constellation) {
-                $constellationNameID = $constellation['constellationName'];
-				echo "<option value=\"$constellationNameID\">$constellationNameID</option>";
-			} ?>
-			</select>
-			<input type="submit" value="Find Stars">
-		</form>
+		<!-- Use a PHP loop to generate a select list of constellations in the DB -->
+		Select the constellation you are searching for: 
+		<select name="constellation">
+		<?php foreach ($constellationResults as $constellation) {
+			$constellationNameID = $constellation['constellationName'];
+			echo "<option value=\"$constellationNameID\">$constellationNameID</option>";
+		} ?>
+		</select>
+		<input type="submit" value="Find Stars">
+	</form>
 
     <!--save bookmarks for user button -->
     <form action ="" method="post">
-            Save bookmarks selected via this button: 
-            <input type="submit" value="Save">
-        <br> <!-- Output table -->
+        Save bookmarks selected via this button: 
+        <input type="submit" value="Save">
+	</form>
+	
+    <br> <!-- Output table -->
 		<table>
 			<tr>
 				<th>Bookmark</th>
@@ -149,4 +151,5 @@
 					</tr>
 			<?php }?>
 		</table>
+	</br>
 </main>
