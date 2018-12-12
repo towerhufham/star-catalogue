@@ -45,7 +45,7 @@
 			<!-- Each item in a row is referenced using the db attribute as the index -->
 			<td><?php echo $one_const['constellationName']; ?></td>
 			<td><?php echo $one_const['abbreviation']; ?></td>
-			<td><?php echo $one_const['borderingConstellation']; ?></td>
+			
 		</tr>
 		<?php } ?>  		
 	</table>

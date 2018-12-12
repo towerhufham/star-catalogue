@@ -8,7 +8,7 @@
 		$currentUser = "Not Logged In";
 		$logStatus = "Login";
     }
-
+    $buildNewTable = false;
     if ($currentUser != "Not Logged In"){
         ini_set('display_errors', 1);//Remove later
         require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
@@ -72,6 +72,9 @@
   <form action="starPage.php">
 		<input type="submit" value="Back" />
   </form>
+  <form method="POST" action=''>
+        Show detailed view: <input type="submit" name = "detailBtn" value="Show">
+    </form>
 </body>
 <main>
 <?php
@@ -88,6 +91,22 @@
 		$numResults = $bookmarkResults->num_rows;
 		echo "<br>Found " . $numResults . " results.";
     }
+
+    if(isset($_POST['detailBtn'])){
+        $query = "SELECT STAR.starProperName, STAR.bayerDesignation,STAR.variableStar, 
+        STAR.henryDraperCatalogue, STAR.hipparcos, STAR.rightAscension, STAR.declination,
+         STAR.apparentMagnitude, STAR.absoluteMagnitude, STAR.cosmicDistanceLadder, 
+         STAR.stellarClassification, STAR.notes, BOOKMARK.constellation FROM BOOKMARK, 
+         STAR WHERE BOOKMARK.star = STAR.starProperName and BOOKMARK.userID = $currentUser 
+         ORDER BY BOOKMARK.constellation ASC";
+
+        $newBookmarkResults = mysqli_query($dbc, $query);
+
+        $bookmarkResults = $newBookmarkResults;
+
+        $buildNewTable = true;
+        //$numResults = $bookmarkResults->num_rows;
+    }
 ?>
 
 <br> 
@@ -95,7 +114,21 @@
 	<table>
 		<tr>
 			<th>Star Proper Name</th>
-			
+            <?php
+            if($buildNewTable){
+            echo "<th>Bayer Designation</th>";
+			echo "<th>Variable Star</th>";
+			echo "<th>Henry Draper Catalogue</th>";
+			echo "<th>Hipparcos</th>";
+			echo "<th>Right Ascension</th>";
+			echo "<th>Declination</th>";
+			echo "<th>Apparent Magnitude</th>";
+			echo "<th>Absolute Magnitude</th>";
+			echo "<th>Cosmic Distance Ladder</th>";
+			echo "<th>Stellar Classification</th>";
+			echo "<th>Notes</th>";
+            }
+            ?>
 			<th>Constellation</th>
 		</tr>
 		<!-- Output the results table one row at a time -->
@@ -105,10 +138,30 @@
 				<tr>
 					<!-- Each row is an array. -->
 					<!-- Each item in a row is referenced using the db attribute as the index -->
-					<td><?php echo $one_star['star']; ?></td>
 					
-					<td><?php echo $one_star['constellation']; ?></td>
+					<?php
+                    if($buildNewTable){
+                        echo "<td>" . $one_star['starProperName'] . "</td>";
+                        echo "<td>" . $one_star['bayerDesignation'] . "</td>";
+						echo "<td>" . $one_star['variableStar'] . "</td>";
+						echo "<td>" . $one_star['henryDraperCatalogue'] . "</td>";
+						echo "<td>" . $one_star['hipparcos'] . "</td>";
+						echo "<td>" . $one_star['rightAscension'] . "</td>";
+						echo "<td>" . $one_star['declination'] .  "</td>";
+						echo "<td>" . $one_star['apparentMagnitude'] . "</td>";
+						echo "<td>" . $one_star['absoluteMagnitude'] . "</td>";
+						echo "<td>" . $one_star['cosmicDistanceLadder'] . "</td>";
+						echo "<td>" . $one_star['stellarClassification'] . "</td>";
+                        echo "<td>" . $one_star['notes'] . "</td>";
+                        echo "<td>" . $one_star['constellation'] . "</td>";
+                    }
+                    else{
+                        echo "<td>" . $one_star['star'] . "</td>";
+                        echo "<td>" . $one_star['constellation'] . "</td>";
+                    }
+                    ?>
+					
 				</tr>
 		<?php } ?>
 	</table>
-</br>
+<br>

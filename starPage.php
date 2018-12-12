@@ -14,7 +14,7 @@
 	require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
     $starQuery = "SELECT * FROM STAR ORDER BY constellation asc";
     //$accountQuery = "SELECT username, password FROM USER";
-    $constellationQuery = "SELECT * FROM CONSTELLATION ORDER BY constellationName ASC";
+    $constellationQuery = "SELECT * FROM CONSTELLATION ORDER BY constellationName ASC"; 
 
 	$starResults = mysqli_query($dbc, $starQuery);
     //$accountResults = mysqli_query($dbc, $accountQuery);
@@ -44,7 +44,7 @@
 </head>
 
 <body>
-  <h1>Star Catalogue</h1>
+  <h1>Star Catalogue Team Data</h1>
   <h2>
     <?php echo $currentUser; ?>
     <form action='' method="post">
@@ -64,7 +64,9 @@
         logout();
     }
     ?>
-	
+	<form method= "POST" action =''>
+		Reset star chart: <input type = "submit" name="resetBtn" value="reset">
+	</form>
 	<form action="constellationPage.php">
 		See constellations: <input type="submit" value="Go" />
 	</form>
@@ -78,12 +80,18 @@
     Search stars: <input type="search" name="search">
     <input type="submit" value="Submit">
   </form>
+  <br>
+  <form method="POST" action=''>
+		Show most popular Stars: <input type="submit" name="popularBtn" value="Show">
+  </form>
 </body>
 <main>
-
+	<form method="POST" action=''>
+		Sort by Bayer Designation: <input type="submit" name="bayerBtn" value="Show">
+	</form>
     <form action = "select_stars.php" method="get">
 		<!-- Use a PHP loop to generate a select list of constellations in the DB -->
-		Select the constellation you are searching for: 
+		Explore the constellation you are lookin for: 
 		<select name="constellation">
 		<?php foreach ($constellationResults as $constellation) {
 			$constellationNameID = $constellation['constellationName'];
@@ -128,6 +136,27 @@
 					$numResults = $starResults->num_rows;
 					echo "<br>Found " . $numResults . " results.";
 				}
+				if(isset($_POST['popularBtn'])){
+					$query = "SELECT STAR.starProperName, STAR.bayerDesignation,STAR.variableStar, 
+					STAR.henryDraperCatalogue, STAR.hipparcos, STAR.rightAscension, STAR.declination,
+					 STAR.apparentMagnitude, STAR.absoluteMagnitude, STAR.cosmicDistanceLadder, 
+					 STAR.stellarClassification, STAR.notes, BOOKMARK.constellation 
+					 FROM BOOKMARK, STAR 
+					 WHERE BOOKMARK.star = STAR.starProperName
+					 ORDER BY BOOKMARK.constellation ASC";
+					$newStarResults = mysqli_query($dbc, $query);
+					global $starResults;
+					$starResults = $newStarResults;
+					//$numResults = $starResults->num_rows;
+				}
+				else if(isset($_POST['bayerBtn'])){
+					$bayerQuery = "SELECT * FROM STAR WHERE STAR.bayerDesignation <> ''";
+
+					$starResults = mysqli_query($dbc, $bayerQuery);
+				}
+				else if(isset($_POST['resetBtn'])){
+					$starResults = mysqli_query($dbc, $starQuery);
+				}
 				foreach ($starResults as $one_star) { ?>
 						<tr>
 							<!-- Each row is an array. -->
@@ -150,6 +179,6 @@
 						</tr>
 				<?php }?>
 			</table>
-		</br>
+		<br>
 	</form>
 </main>
