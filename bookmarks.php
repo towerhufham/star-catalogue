@@ -4,15 +4,25 @@
     if($_SESSION['username']!=null){
         $currentUser = $_SESSION['username'];
         $logStatus = "Logout";
-    }
-    else{
-    $currentUser = "Not Logged In";
-    $logStatus = "Login";
+    } else {
+		$currentUser = "Not Logged In";
+		$logStatus = "Login";
     }
 
     if ($currentUser != "Not Logged In"){
         ini_set('display_errors', 1);//Remove later
         require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
+		
+		//add new bookmarks if needed
+		if (array_key_exists("newBookmarks", $_GET) and $currentUser != "Not Logged In") {
+			$newBookMarks = $_GET["newBookmarks"];
+			foreach ($newBookMarks as $starName) {
+				$star = mysqli_query($dbc, "SELECT * FROM STAR WHERE starProperName = '" . $starName . "'") -> fetch_assoc();
+				$const = $star["constellation"];
+				mysqli_query($dbc, "INSERT INTO BOOKMARK (constellation, star, userID) VALUES ('". $const . "', '" . $starName . "', '" . $currentUser . "')");
+			}
+		}
+		
         $bookmarkQuery = "SELECT * FROM BOOKMARK WHERE userID = '$currentUser' ORDER BY constellation asc";
 
         $bookmarkResults = mysqli_query($dbc, $bookmarkQuery);
@@ -77,25 +87,28 @@
 		//display number of rows found
 		$numResults = $bookmarkResults->num_rows;
 		echo "<br>Found " . $numResults . " results.";
-            }
+    }
 ?>
 
-<br> <!-- Output table -->
-                <table>
-                    <tr>
-                        <th>Star Proper Name</th>
-                        
-                        <th>Constellation</th>
-                    </tr>
-                    <!-- Output the results table one row at a time -->
-                    <?php 
-                            foreach ($bookmarkResults as $one_star) { ?>
-                                <tr>
-                                    <!-- Each row is an array. -->
-                                    <!-- Each item in a row is referenced using the db attribute as the index -->
-                                    <td><?php echo $one_star['star']; ?></td>
-                                    
-                                    <td><?php echo $one_star['constellation']; ?></td>
-                                </tr>
-                    <?php } ?>
-                </table>
+<br> 
+<!-- Output table -->
+	<table>
+		<tr>
+			<th>Star Proper Name</th>
+			
+			<th>Constellation</th>
+		</tr>
+		<!-- Output the results table one row at a time -->
+		<?php 
+			//create table
+			foreach ($bookmarkResults as $one_star) { ?>
+				<tr>
+					<!-- Each row is an array. -->
+					<!-- Each item in a row is referenced using the db attribute as the index -->
+					<td><?php echo $one_star['star']; ?></td>
+					
+					<td><?php echo $one_star['constellation']; ?></td>
+				</tr>
+		<?php } ?>
+	</table>
+</br>
