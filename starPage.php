@@ -87,9 +87,11 @@
   </form>
 </body>
 <main>
+
 	<form method="POST" action=''>
 		Sort by Bayer Designation: <input type="submit" name="bayerBtn" value="Show">
 	</form>
+
     <form action = "select_stars.php" method="get">
 		<!-- Use a PHP loop to generate a select list of constellations in the DB -->
 		Explore the constellation you are looking for: 
@@ -150,12 +152,13 @@
 					$starResults = $newStarResults;
 					//$numResults = $starResults->num_rows;
 				}
-				else if(isset($_POST['bayerBtn'])){
+				if(isset($_POST['bayerBtn'])){
 					$bayerQuery = "SELECT * FROM STAR WHERE STAR.bayerDesignation <> ''";
-
-					$starResults = mysqli_query($dbc, $bayerQuery);
+					$newStarResults = mysqli_query($dbc, $bayerQuery);
+					$starResults = $newStarResults;
 				}
-				else if(isset($_POST['resetBtn'])){
+				if(isset($_POST['resetBtn'])){
+					$starQuery = "Call allstars()";
 					$starResults = mysqli_query($dbc, $starQuery);
 				}
 				foreach ($starResults as $one_star) { ?>
