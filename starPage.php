@@ -12,8 +12,8 @@
     }
 	ini_set('display_errors', 1);//Remove later
 	require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
-    // $starQuery = "SELECT * FROM STAR ORDER BY constellation asc";
-    $starQuery = "CALL allstars()"; //procedure
+    $starQuery = "SELECT * FROM STAR ORDER BY constellation asc";
+    // $starQuery = "CALL allstars()"; //procedure
     //$accountQuery = "SELECT username, password FROM USER";
     $constellationQuery = "SELECT * FROM CONSTELLATION ORDER BY constellationName ASC"; 
 
