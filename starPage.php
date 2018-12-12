@@ -10,29 +10,24 @@
         $currentUser = "Not Logged In";
         $logStatus= "Login";
     }
-	ini_set('display_errors', 1);//Remove later
-	require_once('../mysqli_connection_data.php'); //adjust the relative path as necessary to find your config file
+	require_once('../mysqli_connection_data.php'); //connect to db
     $starQuery = "SELECT * FROM STAR ORDER BY constellation asc";
-    //$accountQuery = "SELECT username, password FROM USER";
     $constellationQuery = "SELECT * FROM CONSTELLATION ORDER BY constellationName ASC"; 
 
 	$starResults = mysqli_query($dbc, $starQuery);
-    //$accountResults = mysqli_query($dbc, $accountQuery);
     $constellationResults = mysqli_query($dbc, $constellationQuery);
 	//Fetch all rows of result as an associative array
 	if($starResults) {
 		mysqli_fetch_all($starResults, MYSQLI_ASSOC);
 	} else {
-		echo mysqli_error($dbc);  //Change to a generic message error before deployment
+		echo "Server Error, We are Sorry for the incovenience";  //Change to a generic message error before deployment
 		mysqli_close($dbc);
 		exit;
     }
 ?>
 
 <!doctype html>
-
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <link href="main.css" rel="stylesheet">
@@ -65,7 +60,7 @@
     }
     ?>
 	<form method= "POST" action =''>
-		Reset star chart: <input type = "submit" name="resetBtn" value="reset">
+		Reset star chart: <input type = "submit" name="resetBtn" value="Reset">
 	</form>
 	<form action="constellationPage.php">
 		See constellations: <input type="submit" value="Go" />
@@ -91,7 +86,7 @@
 	</form>
     <form action = "select_stars.php" method="get">
 		<!-- Use a PHP loop to generate a select list of constellations in the DB -->
-		Explore the constellation you are lookin for: 
+		Explore the constellation you are looking for: 
 		<select name="constellation">
 		<?php foreach ($constellationResults as $constellation) {
 			$constellationNameID = $constellation['constellationName'];
